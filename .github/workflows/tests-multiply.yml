@@ -1,0 +1,12 @@
+name: tests-multiply
+
+on: 
+  pull_request:
+    paths:
+      - 'multiply/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses : actions/checkout@v2
+      - run : cd multiply && pip install -r requirements.txt && pytest
