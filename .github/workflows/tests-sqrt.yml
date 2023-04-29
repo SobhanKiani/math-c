@@ -1,0 +1,12 @@
+name: tests-sqrt
+
+on: 
+  pull_request:
+    paths:
+      - 'sqrt/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses : actions/checkout@v2
+      - run : cd sqrt && pip install -r requirements.txt && pytest
