@@ -1,0 +1,12 @@
+name: tests-power
+
+on: 
+  pull_request:
+    paths:
+      - 'power/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses : actions/checkout@v2
+      - run : cd power && pip install -r requirements.txt && pytest
