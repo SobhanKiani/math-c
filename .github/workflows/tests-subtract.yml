@@ -1,0 +1,12 @@
+name: tests-subtract
+
+on: 
+  pull_request:
+    paths:
+      - 'subtract/**'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses : actions/checkout@v2
+      - run : cd subtract && pip install -r requirements.txt && pytest
