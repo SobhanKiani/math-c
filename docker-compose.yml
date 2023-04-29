@@ -1,0 +1,142 @@
+version: "3.5"
+services:
+  sum:
+    build:
+      context: ./sum
+    container_name: sum
+    image: skn1942/math-c-sum
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    volumes:
+      - "./sum:/app"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  subtract:
+    build:
+      context: ./subtract
+    container_name: subtract
+    image: skn1942/math-c-subtract
+    ports:
+      - "5001:5001"
+    restart: unless-stopped
+    volumes:
+      - "./subtract:/app"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  multiply:
+    build:
+      context: ./multiply
+    container_name: multiply
+    image: skn1942/math-c-multiply
+    ports:
+      - "5002:5002"
+    restart: unless-stopped
+    volumes:
+      - "./multiply:/app"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  division:
+    build:
+      context: ./division
+    container_name: division
+    image: skn1942/math-c-division
+    ports:
+      - "5003:5003"
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - "./division:/app"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  power:
+    build:
+      context: ./power
+    container_name: power
+    image: skn1942/math-c-power
+    ports:
+      - "5004:5004"
+    restart: unless-stopped
+    volumes:
+      - "./power:/app"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  sqrt:
+    build:
+      context: ./sqrt
+    container_name: sqrt
+    image: skn1942/math-c-sqrt
+    ports:
+      - "5005:5005"
+    restart: unless-stopped
+    volumes:
+      - "./sqrt:/app"
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  gateway:
+    build:
+      context: ./gateway
+    container_name: gateway
+    image: skn1942/math-c-gateway
+    ports:
+      - "5006:5006"
+    restart: unless-stopped
+    volumes:
+      - "./gateway:/app"
+    depends_on:
+      - sqrt
+      - power
+      - multiply
+      - division
+      - subtract
+      - sum
+
+  prometheus:
+    image: skn1942/prometheus:latest
+    build: 
+        context: ./monitoring/prometheus
+        dockerfile: prometheus.dockerfile
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus/prometheus-config.yml:/etc/prometheus/prometheus-config.yml
+    env_file:
+      - ./monitoring/prometheus/prometheus.env
+
+  grafana:
+    image: skn1942/grafana:latest
+    container_name: grafana
+    user: "472"
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    volumes:
+      - ./monitoring/grafana/datasource.yml:/etc/grafana/provisioning/datasource.yml
+    env_file:
+      - ./monitoring/grafana/config.monitoring
+      - ./monitoring/grafana/grafana.env
+
+  broker:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+
+networks:
+  test-net:
+    name: test-net
+    driver: bridge
+    ipam:
+      driver: default
+
+volumes:
+  reper_db:

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: power-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: power
+  template:
+    metadata:
+      labels:
+        app: power
+    spec:
+      containers:
+        - name: power
+          image: skn1942/math-o-power:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5004
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: power-srv
+spec:
+  selector:
+    app: power
+  ports:
+    - name: power
+      protocol: TCP
+      port: 5004
+      targetPort: 5004

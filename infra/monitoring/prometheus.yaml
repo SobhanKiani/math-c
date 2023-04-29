@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promatheus-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: promatheus
+  template:
+    metadata:
+      labels:
+        app: promatheus
+    spec:
+      containers:
+        - name: promatheus
+          image: skn1942/prometheus:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 9090
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: promatheus-srv
+spec:
+  selector:
+    app: promatheus
+  ports:
+    - name: promatheus
+      protocol: TCP
+      port: 9090
+      targetPort: 9090

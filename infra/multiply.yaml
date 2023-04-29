@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multiply-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: multiply
+  template:
+    metadata:
+      labels:
+        app: multiply
+    spec:
+      containers:
+        - name: multiply
+          image: skn1942/math-o-multiply:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5002
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: multiply-srv
+spec:
+  selector:
+    app: multiply
+  ports:
+    - name: multiply
+      protocol: TCP
+      port: 5002
+      targetPort: 5002

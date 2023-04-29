@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sum-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sum
+  template:
+    metadata:
+      labels:
+        app: sum
+    spec:
+      containers:
+        - name: sum
+          image: skn1942/math-o-sum:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sum-srv
+spec:
+  selector:
+    app: sum
+  ports:
+    - name: sum
+      protocol: TCP
+      port: 5000
+      targetPort: 5000

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: subtract-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: subtract
+  template:
+    metadata:
+      labels:
+        app: subtract
+    spec:
+      containers:
+        - name: subtract
+          image: skn1942/math-o-subtract:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5001
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: subtract-srv
+spec:
+  selector:
+    app: subtract
+  ports:
+    - name: subtract
+      protocol: TCP
+      port: 5001
+      targetPort: 5001

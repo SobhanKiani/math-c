@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sqrt-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqrt
+  template:
+    metadata:
+      labels:
+        app: sqrt
+    spec:
+      containers:
+        - name: sqrt
+          image: skn1942/math-o-sqrt:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5005
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqrt-srv
+spec:
+  selector:
+    app: sqrt
+  ports:
+    - name: sqrt
+      protocol: TCP
+      port: 5005
+      targetPort: 5005
