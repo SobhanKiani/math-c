@@ -41,3 +41,4 @@ def calculate_equation():
         return {"result": 'The Equation Is Being Calculated', '4ac': ac4}, 200
     except Exception as e:
         return e
+ 

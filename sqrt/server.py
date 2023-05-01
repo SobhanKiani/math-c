@@ -86,4 +86,4 @@ for message in redis_sub.listen():
     if not isinstance(message['data'], int):
         handle_message(message=message)
 
- 
+  
