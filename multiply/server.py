@@ -39,4 +39,4 @@ def calculate_multiply():
         return {'4ac': ac4, '2a': a2}, 200
     except TypeError:
         return 'Error: request must contain a JSON array of numbers.', 400
- 
+  
