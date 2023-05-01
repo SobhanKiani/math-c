@@ -1,1 +1,1 @@
-# Math-Orchestration
+# Math-Choreography
